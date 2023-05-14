@@ -29,9 +29,8 @@
         android:text="Or Signin with"
         android:textColor="#9cd67d"
         app:layout_constraintBottom_toTopOf="@+id/googleButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/googleButton"
+        app:layout_constraintStart_toStartOf="@+id/googleButton" />
 
 
     <LinearLayout
@@ -117,14 +116,17 @@
         android:id="@+id/googleButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="100dp"
         android:background="@drawable/button_background"
         android:gravity="center"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/facebookButton"
-        app:layout_constraintEnd_toEndOf="@+id/facebookButton"
-        app:layout_constraintStart_toStartOf="@+id/facebookButton">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:layout_width="50dp"
@@ -143,43 +145,6 @@
             android:paddingEnd="5dp"
             android:paddingBottom="15dp"
             android:text="Continue with Google"
-            android:textColor="#9cd67d"
-            android:textSize="18dp" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/facebookButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
-        android:background="@drawable/button_background"
-        android:gravity="center"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:src="@drawable/facebook_logo" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="5dp"
-            android:paddingTop="15dp"
-            android:paddingEnd="5dp"
-            android:paddingBottom="15dp"
-            android:text="Continue with Facebook"
             android:textColor="#9cd67d"
             android:textSize="18dp" />
 

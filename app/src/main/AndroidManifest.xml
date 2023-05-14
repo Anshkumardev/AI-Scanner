@@ -21,9 +21,6 @@
             android:name="akd.technologies.scanner.HomeActivity"
             android:exported="false" />
         <activity
-            android:name="akd.technologies.scanner.LoginActivity"
-            android:exported="false" />
-        <activity
             android:name="akd.technologies.scanner.MainActivity"
             android:exported="true">
             <intent-filter>

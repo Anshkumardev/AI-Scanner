@@ -1,6 +1,7 @@
 package akd.technologies.scanner;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ public class HomeActivity extends AppCompatActivity {
     TextView username,email;
     Button signOut;
 
+    CardView translate_and_summarize,translate;
+
 
     FirebaseAuth auth;
     FirebaseDatabase database;
@@ -37,8 +40,20 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         username = findViewById(R.id.guserName);
-        email = findViewById(R.id.gemail);
+        //email = findViewById(R.id.gemail);
         signOut = findViewById(R.id.signOutButton);
+
+        translate_and_summarize = findViewById(R.id.translate_summarize);
+        translate = findViewById(R.id.translate);
+
+        //------------------------Redirect to Translate and summarize page--------------------//
+
+        translate_and_summarize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //do something
+            }
+        });
 
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -51,16 +66,16 @@ public class HomeActivity extends AppCompatActivity {
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if(acct!=null){
             String personName = acct.getDisplayName();
-            String personEmail = acct.getEmail();
+            //String personEmail = acct.getEmail();
             username.setText(personName);
-            email.setText(personEmail);
+            //email.setText(personEmail);
         }
 
         if (user != null){
             String personName = user.getDisplayName();
             String personEmail = user.getEmail();
             username.setText(personName);
-            email.setText(personEmail);
+            //email.setText(personEmail);
         }
 
 
