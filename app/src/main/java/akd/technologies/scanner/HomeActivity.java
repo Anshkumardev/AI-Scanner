@@ -274,6 +274,11 @@ public class HomeActivity extends AppCompatActivity {
 
             view_image.setImageURI(image_uri);
 
+
+            Intent sendimage = new Intent(HomeActivity.this, ImageViewActivity.class);
+            sendimage.putExtra("imageUri", image_uri.toString());
+            startActivity(sendimage);
+
         }
     }
 }
