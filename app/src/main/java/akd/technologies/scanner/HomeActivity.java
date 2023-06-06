@@ -171,7 +171,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void pickCamera() {
         ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE,"New AI Scanner Pictre");
+        values.put(MediaStore.Images.Media.TITLE,"New AI Scanner Picture");
         values.put(MediaStore.Images.Media.DESCRIPTION,"Image Translation");
         image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
 
