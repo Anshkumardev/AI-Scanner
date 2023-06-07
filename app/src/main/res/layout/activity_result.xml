@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
         android:background="@drawable/solid_round_button"
-        android:text="Proceed"
+        android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

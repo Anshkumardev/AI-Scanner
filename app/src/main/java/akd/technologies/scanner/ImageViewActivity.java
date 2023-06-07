@@ -16,6 +16,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -48,6 +49,7 @@ public class ImageViewActivity extends AppCompatActivity {
     ImageView picked_image_viewer;
 
     String selectedImagePath;
+
 
     private String url = "http://" + "10.0.2.2" + ":" + 5000 + "/";
     private String postBodyString;
@@ -115,23 +117,7 @@ public class ImageViewActivity extends AppCompatActivity {
 
         picked_image_viewer.setImageURI(imgUri);
 
-        //-----------------------------------Setting input output values-------------------------//
 
-
-        input_spinner = findViewById(R.id.input_language_spinner);
-        output_spinner = findViewById(R.id.output_language_spinner);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.input_language, android.R.layout.simple_spinner_dropdown_item);
-            // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the adapter to the spinner
-        input_spinner.setAdapter(adapter);
-
-        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.output_language, android.R.layout.simple_spinner_dropdown_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        output_spinner.setAdapter(adapter1);
     }
 
     //----------------------------Python Connection-----------------------------------//
@@ -148,8 +134,8 @@ public class ImageViewActivity extends AppCompatActivity {
         }
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)  // Set the connection timeout
-                .readTimeout(30, TimeUnit.SECONDS)     // Set the read timeout
+                .connectTimeout(60, TimeUnit.SECONDS)  // Set the connection timeout
+                .readTimeout(60, TimeUnit.SECONDS)     // Set the read timeout
                 .build();
 
         Request request = new Request.Builder()

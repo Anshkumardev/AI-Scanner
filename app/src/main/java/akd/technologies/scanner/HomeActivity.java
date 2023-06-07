@@ -2,10 +2,14 @@ package akd.technologies.scanner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.widget.Toolbar;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -16,6 +20,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,11 +36,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int CAMERA_REQUEST_CODE = 200;
     private static final int STORAGE_REQUEST_CODE = 400;
@@ -43,9 +50,14 @@ public class HomeActivity extends AppCompatActivity {
 
     ImageView view_image;
 
+    Toolbar toolbar;
+
     String cameraPermission[];
     String storagePermission[];
 
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    ImageView menuImageView;
     Uri image_uri;
 
     TextView username,email;
@@ -66,11 +78,31 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        view_image = findViewById(R.id.image_view_block);
+
+
+
+        //---------------------------------------App Drawer------------------------------------//
+
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.navigation_view);
+        menuImageView = findViewById(R.id.menu_imageView);
+        toolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+
+        navigationView.bringToFront();
+
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+
 
         username = findViewById(R.id.guserName);
-        //email = findViewById(R.id.gemail);
-        signOut = findViewById(R.id.signOutButton);
 
         Dialog dialog = new Dialog(HomeActivity.this);
 
@@ -151,12 +183,7 @@ public class HomeActivity extends AppCompatActivity {
         }
 
 
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signout();
-            }
-        });
+
 
     }
 
@@ -279,6 +306,32 @@ public class HomeActivity extends AppCompatActivity {
             sendimage.putExtra("imageUri", image_uri.toString());
             startActivity(sendimage);
 
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.info_nav) {
+            // Handle item 1 click
+            Toast.makeText(this, "Info Selected", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.logout_nav) {
+            // Handle item 2 click
+            Toast.makeText(this, "Logout Selected", Toast.LENGTH_SHORT).show();
+
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }else {
+            super.onBackPressed();
         }
     }
 }
