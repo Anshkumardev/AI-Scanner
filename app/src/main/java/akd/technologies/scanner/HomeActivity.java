@@ -299,9 +299,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
 
 
-            view_image.setImageURI(image_uri);
-
-
             Intent sendimage = new Intent(HomeActivity.this, ImageViewActivity.class);
             sendimage.putExtra("imageUri", image_uri.toString());
             startActivity(sendimage);
