@@ -5,25 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context="akd.technologies.scanner.ImageViewActivity">
-
+    tools:context="akd.technologies.scanner.TranslateActivity">
 
     <ImageView
-        android:id="@+id/picked_image_viewer"
+        android:id="@+id/picked_image_viewer_translate"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/proceed_btn"
+        app:layout_constraintBottom_toTopOf="@+id/proceed_btn_translate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ImageViewerTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/ImageViewerTitle1" />
 
     <Button
-        android:id="@+id/proceed_btn"
+        android:id="@+id/proceed_btn_translate"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="80dp"
         android:background="@drawable/solid_round_button"
         android:text="Proceed"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,7 +32,7 @@
 
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/progressBar"
+        android:id="@+id/progressBarTranslate"
         android:elevation="15dp"
         android:layout_width="200dp"
         android:layout_height="200dp"
@@ -58,14 +57,14 @@
         android:background="#000000" />
 
     <TextView
-        android:id="@+id/ImageViewerTitle"
+        android:id="@+id/ImageViewerTitle1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="25dp"
-        android:text="Translate and Summarize"
-        android:textStyle="bold"
+        android:text="Translate"
         android:textSize="24dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

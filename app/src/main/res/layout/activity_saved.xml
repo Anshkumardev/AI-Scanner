@@ -4,11 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    tools:context="akd.technologies.scanner.ResultActivity">
+    tools:context="akd.technologies.scanner.savedActivity">
 
-    <TextView
-        android:id="@+id/dynamicTitle"
+    <androidx.cardview.widget.CardView
+        android:visibility="gone"
+        android:id="@+id/delete"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
+        android:backgroundTint="#FFC107"
+        android:padding="10dp"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:src="@drawable/baseline_delete_24" />
+
+    </androidx.cardview.widget.CardView>
+
+    <EditText
+        android:hint="Title here"
+        android:background="@drawable/edittext_bg"
+        android:id="@+id/savedTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -20,7 +43,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/save_btn"
+        android:id="@+id/save_and_edit_btn"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
@@ -41,18 +64,20 @@
         android:layout_marginBottom="30dp"
         android:background="#282828"
         app:cardCornerRadius="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/save_btn"
+        app:layout_constraintBottom_toTopOf="@+id/save_and_edit_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dynamicTitle">
+        app:layout_constraintTop_toBottomOf="@+id/savedTitle">
 
         <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp">
 
-            <TextView
-                android:id="@+id/summary_textView"
+            <EditText
+                android:hint="Text Here"
+                android:id="@+id/saved_textView"
+                android:background="@drawable/edittext_bg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="18dp"
@@ -65,9 +90,9 @@
     </androidx.cardview.widget.CardView>
 
     <ProgressBar
-        android:visibility="gone"
-        android:id="@+id/progressBar4"
+        android:id="@+id/progressBar3"
         style="?android:attr/progressBarStyle"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
@@ -76,5 +101,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressBar5"
+        style="?android:attr/progressBarStyle"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="30dp"
+        android:progressTint="#FF9800"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

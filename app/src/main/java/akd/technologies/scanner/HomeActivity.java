@@ -1,5 +1,7 @@
 package akd.technologies.scanner;
 
+import static android.os.Build.VERSION_CODES.Q;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -10,6 +12,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -30,16 +34,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.scanner.R;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.Query;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -52,12 +60,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     Toolbar toolbar;
 
+    RecyclerView recyclerView;
+
+    SavedAdapter savedAdapter;
+
     String cameraPermission[];
     String storagePermission[];
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    ImageView menuImageView;
     Uri image_uri;
 
     TextView username,email;
@@ -66,6 +77,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     CardView translate_and_summarize,translate;
 
     ImageView camera_image,gallery_image;
+    private boolean fromTranslate;
 
     FirebaseAuth auth;
     FirebaseDatabase database;
@@ -73,22 +85,39 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
 
+    FloatingActionButton add;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        add = findViewById(R.id.add_note);
 
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, savedActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        //------------------------------------Recycler View----------------------------------//
+
+        recyclerView = findViewById(R.id.recyclerView);
+        
+        setUpRecyclerView();
 
 
         //---------------------------------------App Drawer------------------------------------//
 
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigation_view);
-        menuImageView = findViewById(R.id.menu_imageView);
         toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("AI Scanner");
 
         navigationView.bringToFront();
 
@@ -118,6 +147,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         translate_and_summarize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                fromTranslate = false;
 
                 dialog.setContentView(R.layout.image_selection_dialog);
                 dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -159,6 +190,52 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        //----------------------------------Translate -------------------------------//
+
+        translate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fromTranslate = true;
+
+                dialog.setContentView(R.layout.image_selection_dialog);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.setCancelable(true);
+
+                camera_image = dialog.findViewById(R.id.camera_selection);
+                gallery_image = dialog.findViewById(R.id.gallery_selection);
+
+                camera_image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if(!checkCameraPermission()){
+                            requestCameraPermission();
+                        }
+                        else{
+                            pickCamera();
+                            dialog.dismiss();
+                        }
+                    }
+                });
+
+                gallery_image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(!checkStoragePermission()){
+
+                            requestStoragePermission();
+                        }
+                        else {
+                            pickGallery();
+                            dialog.dismiss();
+                        }
+                    }
+                });
+
+                dialog.show();
+            }
+        });
+
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
@@ -185,6 +262,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+    }
+
+    //-----------------------------------Setting recyclerview items-----------------------------//44
+    private void setUpRecyclerView() {
+
+        Query query = Utility.getCollectionReferenceForNotes().orderBy("timestamp",Query.Direction.DESCENDING);
+        FirestoreRecyclerOptions<saved> options = new FirestoreRecyclerOptions.Builder<saved>().setQuery(query, saved.class).build();
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        savedAdapter = new SavedAdapter(options,this);
+        recyclerView.setAdapter(savedAdapter);
     }
 
     private void pickGallery() {
@@ -220,27 +309,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private void requestCameraPermission() {
 
         ActivityCompat.requestPermissions(this,cameraPermission,CAMERA_REQUEST_CODE);
-    }
-
-    void signout(){
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        FirebaseUser user = auth.getCurrentUser();
-        if(acct!=null){
-            gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(Task<Void> task) {
-                    finish();
-                    startActivity(new Intent(HomeActivity.this,MainActivity.class));
-                }
-            });
-            
-        }
-
-        if (user != null) {
-            auth.signOut();
-            startActivity(new Intent(HomeActivity.this,MainActivity.class));
-        }
-
     }
 
     //--------------------check camera permission--------------------------//
@@ -299,9 +367,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
 
 
-            Intent sendimage = new Intent(HomeActivity.this, ImageViewActivity.class);
-            sendimage.putExtra("imageUri", image_uri.toString());
-            startActivity(sendimage);
+            if(fromTranslate){
+                Intent sendimage = new Intent(HomeActivity.this, TranslateActivity.class);
+                sendimage.putExtra("imageUri", image_uri.toString());
+                startActivity(sendimage);
+            }else {
+                Intent sendimage = new Intent(HomeActivity.this, ImageViewActivity.class);
+                sendimage.putExtra("imageUri", image_uri.toString());
+                startActivity(sendimage);
+            }
+
 
         }
     }
@@ -315,12 +390,32 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(this, "Info Selected", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.logout_nav) {
             // Handle item 2 click
-            Toast.makeText(this, "Logout Selected", Toast.LENGTH_SHORT).show();
-
+            signOut();
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void signOut() {
+
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        FirebaseUser user = auth.getCurrentUser();
+        if(acct!=null){
+            gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(Task<Void> task) {
+                    finish();
+                    startActivity(new Intent(HomeActivity.this,MainActivity.class));
+                }
+            });
+
+        }
+
+        if (user != null) {
+            auth.signOut();
+            startActivity(new Intent(HomeActivity.this,MainActivity.class));
+        }
     }
 
     @Override
@@ -331,4 +426,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        savedAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        savedAdapter.stopListening();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        savedAdapter.notifyDataSetChanged();
+    }
 }
+

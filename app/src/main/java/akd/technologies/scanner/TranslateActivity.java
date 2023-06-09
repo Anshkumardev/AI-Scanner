@@ -16,11 +16,8 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -39,35 +36,30 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ImageViewActivity extends AppCompatActivity {
+public class TranslateActivity extends AppCompatActivity {
 
-    Spinner input_spinner, output_spinner;
-
-    LottieAnimationView progressBar;
+    private String url = "http://" + "10.0.2.2" + ":" + 5000 + "/translate";
+    private String postBodyString;
+    private MediaType mediaType;
+    private RequestBody requestBody;
+    private Button proceed;
 
     Uri imgUri;
     ImageView picked_image_viewer;
 
     String selectedImagePath;
 
-
-    private String url = "http://" + "10.0.2.2" + ":" + 5000 + "/";
-    private String postBodyString;
-    private MediaType mediaType;
-    private RequestBody requestBody;
-    private Button proceed;
-
+    LottieAnimationView progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_view);
-
+        setContentView(R.layout.activity_translate);
 
         //---------------------------------Python Connect-------------------------//
 
-        proceed = findViewById(R.id.proceed_btn);
-        progressBar = findViewById(R.id.progressBar);
+        proceed = findViewById(R.id.proceed_btn_translate);
+        progressBar = findViewById(R.id.progressBarTranslate);
 
         proceed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +85,7 @@ public class ImageViewActivity extends AppCompatActivity {
 
                 RequestBody postBodyImage = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
-                        .addFormDataPart("image", "img.jpg", RequestBody.create(MediaType.parse("image/*jpg"), byteArray))
+                        .addFormDataPart("image", "androidTranslate.jpg", RequestBody.create(MediaType.parse("image/*jpg"), byteArray))
                         .build();
 
 
@@ -105,7 +97,7 @@ public class ImageViewActivity extends AppCompatActivity {
 
         //----------------------------Setting Image to imageView----------------//
 
-        picked_image_viewer = findViewById(R.id.picked_image_viewer);
+        picked_image_viewer = findViewById(R.id.picked_image_viewer_translate);
 
         Bundle bundle = getIntent().getExtras();
 
@@ -158,7 +150,7 @@ public class ImageViewActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         View darkOverlay = findViewById(R.id.dark_overlay);
                         darkOverlay.setVisibility(View.GONE);
-                        Toast.makeText(ImageViewActivity.this, "Something went wrong:" + " " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TranslateActivity.this, "Something went wrong:" + " " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         Log.i("error",e.toString());
                     }
                 });
@@ -175,17 +167,17 @@ public class ImageViewActivity extends AppCompatActivity {
                             progressBar.setVisibility(View.GONE);
                             View darkOverlay = findViewById(R.id.dark_overlay);
                             darkOverlay.setVisibility(View.GONE);
-                            String summary = response.body().string();
-                            Intent intent = new Intent(ImageViewActivity.this, ResultActivity.class);
-                            intent.putExtra("summary", summary);
-                            intent.putExtra("title","Translated and Summarized");
+                            String translation = response.body().string();
+                            Intent intent = new Intent(TranslateActivity.this, ResultActivity.class);
+                            intent.putExtra("summary", translation);
+                            intent.putExtra("title","Translation");
                             startActivity(intent);
                         } catch (IOException e) {
                             progressBar.cancelAnimation();
                             progressBar.setVisibility(View.GONE);
                             View darkOverlay = findViewById(R.id.dark_overlay);
                             darkOverlay.setVisibility(View.GONE);
-                            Toast.makeText(ImageViewActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TranslateActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

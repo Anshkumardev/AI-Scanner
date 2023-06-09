@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseDatabase database;
 
-    ProgressDialog progressDialog;
+    ProgressBar progressBar2;
 
 
 
@@ -57,10 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-
-        progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setTitle("Signing in");
-        progressDialog.setMessage("Stay with us!");
+        progressBar2 = findViewById(R.id.progressBar2);
 
         googleButton = findViewById(R.id.googleButton);
         register = findViewById(R.id.register_here);
@@ -108,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                login.setVisibility(View.INVISIBLE);
+                progressBar2.setVisibility(View.VISIBLE);
                 loginUser();
             }
         });
@@ -122,19 +122,24 @@ public class MainActivity extends AppCompatActivity {
         if(TextUtils.isEmpty(email)){
             username.setError("Email cannot be empty");
             username.requestFocus();
+            login.setVisibility(View.VISIBLE);
+            progressBar2.setVisibility(View.GONE);
         }else if (TextUtils.isEmpty(signinPassword)){
             password.setError("Password cannot be empty");
             password.requestFocus();
+            login.setVisibility(View.VISIBLE);
+            progressBar2.setVisibility(View.GONE);
         }else{
             auth.signInWithEmailAndPassword(email,signinPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         Toast.makeText(MainActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(MainActivity.this,HomeActivity.class));
-                        finish();
+                        navigateToHomeActivity();
                     }else{
                         Toast.makeText(MainActivity.this, "Log in Error"+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        login.setVisibility(View.VISIBLE);
+                        progressBar2.setVisibility(View.GONE);
                     }
                 }
             });
@@ -197,6 +202,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void navigateToHomeActivity(){
+        login.setVisibility(View.VISIBLE);
+        progressBar2.setVisibility(View.GONE);
         finish();
         Intent intent = new Intent(MainActivity.this,HomeActivity.class);
         startActivity(intent);
