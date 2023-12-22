@@ -1,14 +1,11 @@
 # Android App for Image Text Summarization and Translation
 
 
-
-![image](https://github.com/Anshkumardev/AI-Scanner/assets/71209639/1aec39dd-0424-424b-ba9f-c278189e1c3c)
-
-![image](https://github.com/Anshkumardev/AI-Scanner/assets/71209639/b4035f96-0997-4a4f-920c-c3b99e7812f4)
-
-
-![image](https://github.com/Anshkumardev/AI-Scanner/assets/71209639/c90af0f6-57b7-4b65-a0a3-58f5b1afe87c)
-
+<p float="left">
+  <img src="https://github.com/Anshkumardev/AI-Scanner/assets/71209639/1aec39dd-0424-424b-ba9f-c278189e1c3c" width="48%" />
+  <img src="https://github.com/Anshkumardev/AI-Scanner/assets/71209639/b4035f96-0997-4a4f-920c-c3b99e7812f4" width="48%" /> 
+</p>
+<img src="https://github.com/Anshkumardev/AI-Scanner/assets/71209639/c90af0f6-57b7-4b65-a0a3-58f5b1afe87c" width="60%" />
 
 
 
