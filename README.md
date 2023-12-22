@@ -1,5 +1,16 @@
 # Android App for Image Text Summarization and Translation
 
+
+![image](https://github.com/Anshkumardev/AI-Scanner/assets/71209639/ec6f8c05-c640-440a-9010-204e7873edcd)
+
+![image](https://github.com/Anshkumardev/AI-Scanner/assets/71209639/b4035f96-0997-4a4f-920c-c3b99e7812f4)
+
+
+![image](https://github.com/Anshkumardev/AI-Scanner/assets/71209639/c90af0f6-57b7-4b65-a0a3-58f5b1afe87c)
+
+
+
+
 ## Overview
 This Android application is designed to streamline the process of translating and summarizing text from images. Primarily focusing on Hindi notices, it employs OCR technology and machine learning algorithms to provide English translations and concise summaries. 
 
